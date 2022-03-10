@@ -129,7 +129,7 @@ namespace LogansBooksWeb.Areas.Customer.Controllers
             if (applicationUser.CompanyId.GetValueOrDefault() == 0)
             {
                 //stripe settings 
-                var domain = "https://localhost:5001/";
+                var domain = "https://localhost:7293/";
                 var options = new SessionCreateOptions
                 {
                     PaymentMethodTypes = new List<string>
@@ -150,7 +150,7 @@ namespace LogansBooksWeb.Areas.Customer.Controllers
                         PriceData = new SessionLineItemPriceDataOptions
                         {
                             UnitAmount = (long)(item.Price * 100),//20.00 -> 2000
-                            Currency = "usd",
+                            Currency = "zar",
                             ProductData = new SessionLineItemPriceDataProductDataOptions
                             {
                                 Name = item.Product.Title
