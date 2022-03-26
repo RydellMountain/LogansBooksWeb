@@ -153,6 +153,7 @@ namespace LogansBooksWeb.Areas.Customer.Controllers
                         PriceData = new SessionLineItemPriceDataOptions
                         {
                             UnitAmount = (long)(item.Price * 100),//20.00 -> 2000
+                            // Setting the currency type
                             Currency = "usd",
                             ProductData = new SessionLineItemPriceDataProductDataOptions
                             {
