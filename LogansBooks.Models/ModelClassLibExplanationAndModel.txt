@@ -1,0 +1,6 @@
+﻿The Model class library seperates the models and viewmodels from the applcation to make the application easier to navigate for the next developer.
+
+The Models allow the developer to iniciate the various variables that will be needed for each section of the applcation.
+we can also specify which variables are primary, secondary and foreign keys whihc can interface with other models.
+The models also will be used as Database entities.
+After adding them to the ApplicationDbContext and running a migration on the NugetPacket Manager they will be added to the database

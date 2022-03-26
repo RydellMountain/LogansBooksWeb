@@ -1,0 +1,5 @@
+﻿the controllers for the admin are generally all really simple as the admin deals with creating different items for the application
+Such as the category, cover types, companies and the products.
+Most of the methods in all of these controllers are CRUD operations as the admin will have to create, edit, update, or remove items when they seem fit to do so.
+
+All of the relevant Controllers will also have files linked to them in the views folder and each different method for each controller will have a relating view to display to the admin user

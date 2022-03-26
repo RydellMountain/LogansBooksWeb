@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 
 namespace LogansBooks.Utility
 {
+    //EmailSender is a utility that the team created to initalize the variables for the emails to be send
+    // instead of declaring these varabiles multiple times in controllers, this Class is intended to just be called when needed in certain controllers
     public class EmailSender : IEmailSender
     {
         public string SendGridSecret { get; set; }

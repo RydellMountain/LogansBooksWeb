@@ -5,6 +5,8 @@ using System.Security.Claims;
 
 namespace LogansBooksWeb.ViewComponents
 {
+    //A view component that plays a roll in updating the cart amount using cookies. when ever a user logsin the cart amount will be the same as they left it.
+    // each users cookies is indivdual 
     public class ShoppingCartViewComponent : ViewComponent
     {
         private readonly IUnitOfWork _unitOfWork;

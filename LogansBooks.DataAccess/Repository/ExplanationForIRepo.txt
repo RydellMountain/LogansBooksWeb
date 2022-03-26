@@ -1,0 +1,8 @@
+﻿Repos acts as an Interface.
+Has generic methods for get, get all, add, remove, first or default and any other common methods.
+
+For Irepo we will implement and inteface to the The Irepo when we want to define any custom methods
+
+example
+ProductRepository will implement and interface to IProductRepository
+

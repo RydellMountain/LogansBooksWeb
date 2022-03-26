@@ -8,7 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace LogansBooks.DataAccess;
-
+//The ApplicationDbContext is used to connect the application models to the database, which allows the developer to use the Nuget Packet manager to update the database with commands
+//instead of using SQL 
 public class ApplicationDbContext :IdentityDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)

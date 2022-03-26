@@ -24,7 +24,8 @@ namespace LogansBooksWeb.Areas.Customer.Controllers
             _emailSender = emailSender;
         }
 
-        //To pull all the items for each users cart
+        //Retrieves all the items in that particular users cart and will display those items in the "Cart" view which will be named the index.
+        //the users cart information is sorted by using cookies enabled in the Program.cs file
         public IActionResult Index()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -45,6 +46,8 @@ namespace LogansBooksWeb.Areas.Customer.Controllers
             return View(ShoppingCartVM);
         }
 
+        //The Summary will display the summary of the order to the user.
+        //information that is shown is the customer name, Phone number, address city state(or province) and postal code and will also show the final price
         public IActionResult Summary()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -77,6 +80,12 @@ namespace LogansBooksWeb.Areas.Customer.Controllers
             return View(ShoppingCartVM);
         }
 
+        //the Summary post is where the customer will use the stripe API to pay for the books they want to purchase
+        //The users information will be gathered by the claims Methos and then be saved.
+        //The shopping cart viewmodel variables will be also updated for that specific customer and will be saved
+        //The method will loop through each Item in the cart and will iterate them to the stripe API and calculate how much need to be paid
+        //After payment is complete the shopping cart will be emptied and the cart cookies will be reset
+
         [HttpPost]
         [ActionName("Summary")]
         [ValidateAntiForgeryToken]
@@ -92,7 +101,7 @@ namespace LogansBooksWeb.Areas.Customer.Controllers
             ShoppingCartVM.OrderHeader.OrderDate = System.DateTime.Now;
             ShoppingCartVM.OrderHeader.ApplicationUserId = claim.Value;
 
-
+            
             foreach (var cart in ShoppingCartVM.ListCart)
             {
                 cart.Price = GetPriceBasedOnQuantity(cart.Count, cart.Product.Price,
@@ -186,6 +195,8 @@ namespace LogansBooksWeb.Areas.Customer.Controllers
         }
 
         // Order confrimation after checkout
+        //The customer will be redicted to a confirmation page and they will be shown their order number
+        //An email will also be sent to the customers email 
         public IActionResult OrderConfirmation(int id)
         {
             OrderHeader orderHeader = _unitOfWork.OrderHeader.GetFirstOrDefault(u => u.Id == id, includeProperties: "ApplicationUser");
@@ -208,7 +219,7 @@ namespace LogansBooksWeb.Areas.Customer.Controllers
             return View(id);
         }
 
-        // Increasing the quantity of the itema on the shopping cart
+        // Increasing the quantity of the items on the shopping cart as well as increacing the total price 
         public IActionResult Plus(int cartId)
         {
             var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(u => u.Id == cartId);
@@ -217,7 +228,7 @@ namespace LogansBooksWeb.Areas.Customer.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // Decreasing the quantity of the itema on the shopping cart
+        // Decreasing the quantity of the itema on the shopping cartas well as decreasing the total price 
         public IActionResult Minus(int cartId)
         {
             var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(u => u.Id == cartId);
@@ -235,7 +246,7 @@ namespace LogansBooksWeb.Areas.Customer.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        //Deleting an item on the shopping cart
+        //Deleting an item on the shopping cart this will completely remove the item from the shopping cart and the price will be adjusted
         public IActionResult Remove(int cartId)
         {
             var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(u => u.Id == cartId);

@@ -8,7 +8,7 @@ namespace LogansBooks.Utility
 {
     public static class SD
     {
-        //This is we put our magci strings to have a centralized places to makae changes to them if needed
+        //This is we put our magic strings to have a centralized places to make changes to them if needed
 
         //For the Registration page fpr roles assignment
         public const string Role_User_Indi = "Individual";

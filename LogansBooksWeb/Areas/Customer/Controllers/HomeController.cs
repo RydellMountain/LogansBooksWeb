@@ -39,7 +39,9 @@ public class HomeController : Controller
 
             return View(cartObj);
         }
-
+    
+        //The home page will display how many items are currently in the shopping cart.
+        //This will also update responsively when an item is deleted from the shopping cart
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]

@@ -10,12 +10,14 @@ using System.Threading.Tasks;
 
 namespace LogansBooks.DataAccess.DbInitializer
 {
+    //DbInitializer is essentailly an initializer that wwhen the application is run for the first time (Either locally or deployed) data can be populated into the database
     public class DbInitializer : IDbInitializer
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ApplicationDbContext _db;
 
+        //Addes these partculiar roles to the database when the database has not being populated on first deployment or first local run
         public DbInitializer(
             UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
@@ -29,7 +31,7 @@ namespace LogansBooks.DataAccess.DbInitializer
 
         public void Initialize()
         {
-            //migrations if they are not applied
+            //will retrieve any migrations that have not being updated to the application
             try
             {
                 if (_db.Database.GetPendingMigrations().Count() > 0)
@@ -43,6 +45,7 @@ namespace LogansBooks.DataAccess.DbInitializer
             }
 
             //create roles if they are not created
+            // They will be created when the database is first created locally or deployed
             if (!_roleManager.RoleExistsAsync(SD.Role_Admin).GetAwaiter().GetResult())
             {
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin)).GetAwaiter().GetResult();

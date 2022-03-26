@@ -7,6 +7,13 @@ using System.Threading.Tasks;
 
 namespace LogansBooks.DataAccess.Repository
 {
+    // coordinates hte work of multiple repos by creating a single database context class that is shared by all of them
+    // essentailly maintains a list of objects affected by a business transaction and co ordinated the writing out if the changes 
+
+
+    //Example is that the controllers interact with the unitofwork which has all the repos
+    //and the unitofwork will interact with the database and the entity framework
+
     public class UnitOfWork : IUnitOfWork
     {
         private ApplicationDbContext _db;
