@@ -11,7 +11,7 @@ using System.Security.Claims;
 namespace LogansBooksWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    [Authorize] // Obligating login first
     public class OrderController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -37,6 +37,7 @@ namespace LogansBooksWeb.Areas.Admin.Controllers
             return View(OrderVM);
         }
 
+        //Handling the order payment on our gateway Stripe
         [ActionName("Details")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -88,6 +89,7 @@ namespace LogansBooksWeb.Areas.Admin.Controllers
             return new StatusCodeResult(303);
         }
 
+        // Confirm that the order went through before updating the order status
         public IActionResult PaymentConfirmation(int orderHeaderid)
         {
             OrderHeader orderHeader = _unitOfWork.OrderHeader.GetFirstOrDefault(u => u.Id == orderHeaderid);
@@ -95,7 +97,7 @@ namespace LogansBooksWeb.Areas.Admin.Controllers
             {
                 var service = new SessionService();
                 Session session = service.Get(orderHeader.SessionId);
-                //check the stripe status
+                //check the stripe status first to see if the payment got approved
                 if (session.PaymentStatus.ToLower() == "paid")
                 {
                     _unitOfWork.OrderHeader.UpdateStatus(orderHeaderid, orderHeader.OrderStatus, SD.PaymentStatusApproved);
@@ -105,6 +107,7 @@ namespace LogansBooksWeb.Areas.Admin.Controllers
             return View(orderHeaderid);
         }
 
+        //Updating the order deatils after the order is made
         [HttpPost]
         [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
         [ValidateAntiForgeryToken]

@@ -23,6 +23,8 @@ namespace LogansBooksWeb.Areas.Customer.Controllers
             _unitOfWork = unitOfWork;
             _emailSender = emailSender;
         }
+
+        //To pull all the items for each users cart
         public IActionResult Index()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -114,6 +116,7 @@ namespace LogansBooksWeb.Areas.Customer.Controllers
             _unitOfWork.Save();
             foreach (var cart in ShoppingCartVM.ListCart)
             {
+                // adding things 
                 OrderDetail orderDetail = new()
                 {
                     ProductId = cart.ProductId,
@@ -150,7 +153,12 @@ namespace LogansBooksWeb.Areas.Customer.Controllers
                         PriceData = new SessionLineItemPriceDataOptions
                         {
                             UnitAmount = (long)(item.Price * 100),//20.00 -> 2000
+
+                            // Setting the currency type
+                            //Currency = "usd",
+
                             Currency = "zar",
+
                             ProductData = new SessionLineItemPriceDataProductDataOptions
                             {
                                 Name = item.Product.Title
@@ -177,6 +185,7 @@ namespace LogansBooksWeb.Areas.Customer.Controllers
             }
         }
 
+        // Order confrimation after checkout
         public IActionResult OrderConfirmation(int id)
         {
             OrderHeader orderHeader = _unitOfWork.OrderHeader.GetFirstOrDefault(u => u.Id == id, includeProperties: "ApplicationUser");
@@ -184,7 +193,7 @@ namespace LogansBooksWeb.Areas.Customer.Controllers
             {
                 var service = new SessionService();
                 Session session = service.Get(orderHeader.SessionId);
-                //check the stripe status
+                //check the stripe status to see it was successfull then save the changes
                 if (session.PaymentStatus.ToLower() == "paid")
                 {
                     _unitOfWork.OrderHeader.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);
@@ -199,6 +208,7 @@ namespace LogansBooksWeb.Areas.Customer.Controllers
             return View(id);
         }
 
+        // Increasing the quantity of the itema on the shopping cart
         public IActionResult Plus(int cartId)
         {
             var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(u => u.Id == cartId);
@@ -207,6 +217,7 @@ namespace LogansBooksWeb.Areas.Customer.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // Decreasing the quantity of the itema on the shopping cart
         public IActionResult Minus(int cartId)
         {
             var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(u => u.Id == cartId);
@@ -224,6 +235,7 @@ namespace LogansBooksWeb.Areas.Customer.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        //Deleting an item on the shopping cart
         public IActionResult Remove(int cartId)
         {
             var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(u => u.Id == cartId);
